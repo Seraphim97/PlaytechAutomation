@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.interactions.Actions;
 
@@ -30,6 +29,17 @@ public class BonusTask {
     void playtechAutomationTest() throws IOException, InterruptedException {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        // Get window size and print it
+        Dimension screenSize = driver.manage().window().getSize();
+        int screenWidth = screenSize.getWidth();
+        int screenHeight = screenSize.getHeight();
+        System.out.println("Screen resolution: " + screenWidth + "x" + screenHeight);
+
+        // Save screen resolution to file
+        try (FileWriter writer = new FileWriter("test_results.txt", true)) {
+            writer.write("Screen resolution: " + screenWidth + "x" + screenHeight + "\n");
+        }
+
         // Open Playtech website
         driver.get("https://www.playtechpeople.com");
         Thread.sleep(3000); // Wait for full load
@@ -37,7 +47,7 @@ public class BonusTask {
         // Try to close the cookie consent popup if it appears by clicking on the "Deny" button using coordinates (280, 58)
         clickAtCoordinates(280, 58);
 
-        // Click on the "Locations" button using coordinates (73.3, 18)
+        // Click on the "Locations" button using coordinates (73, 18)
         clickAtCoordinates(73, 18);
         Thread.sleep(2000); // Allow page to load
 
@@ -45,7 +55,7 @@ public class BonusTask {
         List<WebElement> locationLinks = driver.findElements(By.className("item-title"));
 
         // Print and write to file all locations found
-        try (FileWriter writer = new FileWriter("test_results.txt")) {
+        try (FileWriter writer = new FileWriter("test_results.txt", true)) {
             System.out.println("Found locations:");
             for (WebElement locationLink : locationLinks) {
                 String locationText = locationLink.getText();
@@ -54,7 +64,7 @@ public class BonusTask {
             }
         }
 
-        // Click on "All Jobs" button using coordinates (126.5, 47.39)
+        // Click on "All Jobs" button using coordinates (126, 47)
         clickAtCoordinates(126, 47);
 
         // Wait for the "All Jobs" page to load and grab all job elements
